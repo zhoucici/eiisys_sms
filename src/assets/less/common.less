@@ -1,0 +1,275 @@
+//  基础样式
+html,
+body,
+#app {
+    height: 100%;
+}
+
+body,
+p,
+input,
+form,
+ul,
+li {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+
+}
+
+a {
+    text-decoration: none;
+    color: #333;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+//页面表格
+.page-list {
+    color: rgba(0, 0, 0, 0.65);
+
+    .list-head {
+        height: 54px;
+        line-height: 53px;
+        background: #FAFAFA;
+        border-bottom: 1px solid #E9E9E9;
+        font-family: PingFangSC;
+        font-size: 14px;
+        font-weight: 600;
+    }
+
+    .list-head,
+    .list-item {
+        .clear();
+
+        >div {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            float: left;
+            padding-left: 16px;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+    }
+
+    .list-item,
+    .list-bottom {
+        height: 46px;
+        line-height: 45px;
+        border-bottom: 1px solid #E9E9E9;
+    }
+}
+
+
+//浮动
+.floatright {
+    float: right;
+}
+
+.floatleft {
+    float: left;
+}
+
+//卡片样式
+.card {
+    background: #FFFFFF;
+    border: 1px solid #DFE3E8;
+    box-sizing: border-box;
+    border-radius: 4px;
+    .clear();
+
+    &>.title {
+        font-size: 14px;
+        line-height: 51px;
+        padding-right: 16px;
+        color: #1E2B37;
+        height: 52px;
+        border-bottom: 1px solid #DFE3E8;
+        font-weight: 600;
+        padding-left: 16px;
+    }
+
+    &+.card {
+        margin-top: 24px;
+    }
+}
+
+// 通用按钮
+.z-btn {
+    @width: 65px;
+    @height: 32px;
+    border-radius: 4px;
+    display: inline-block;
+    min-width: @width;
+    height: @height;
+    text-align: center;
+    line-height: 22px;
+    padding: 5px 17px;
+    color: #FFFFFF;
+    background: @g_btn_b;
+    font-size: 14px;
+    cursor: pointer;
+    transition: 0.3s;
+    user-select: none;
+
+    &:hover {
+        background: @g_btn_h;
+    }
+
+    &:active {
+        background: @g_btn_a;
+    }
+
+    &+.z-btn {
+        margin-left: 10px;
+    }
+
+    &.unclick {
+        cursor: not-allowed;
+        
+    }
+
+    //次要按钮
+    &.normal {
+        border: 1px solid #CDD1D4;
+        background: #fff;
+        color: #1E2B37;
+
+        &:hover {
+            background: #EFEFEF;
+        }
+
+        &:active {
+            background: #CDD1D4;
+        }
+    }
+
+    //文字按钮
+    &.text {
+        padding: 0;
+        min-width: none;
+        display: inline;
+        color: #007ACE;
+        background: none;
+        &.disabled{
+            cursor: not-allowed;
+            pointer-events: none;
+            color: #C2CDD6;
+        }
+        &.red {
+            color: rgba(255, 82, 87, 1); //红字按钮
+
+            &:hover {
+                color: rgba(255, 82, 87, 0.6);
+            }
+
+            &:active {
+                color: rgba(210, 35, 39, 1);
+            }
+        }
+
+        &:hover {
+            color: #0097FF;
+        }
+
+        &:active {
+            color: #005C9C;
+        }
+    }
+}
+
+//pop提示信息
+.pop {
+    .tip {
+        padding: 10px 44px;
+        height: 81px;
+
+        img {
+            vertical-align: middle;
+            margin-right: 24px;
+        }
+
+        span {
+            vertical-align: middle;
+            color: rgba(0, 0, 0, 0.85);
+            font-weight: 600;
+        }
+    }
+}
+
+//*******element-ui****//
+.el-tabs__nav-wrap {
+    padding: 0 25px;
+}
+
+.el-tabs__active-bar {
+    margin-right: 20px;
+    width: 88px !important;
+}
+
+.el-tabs__item {
+    height: 45px;
+    padding: 0;
+    line-height: 45px;
+    text-align: center;
+    width: 88px !important;
+}
+
+.el-dialog {
+    border-radius: 4px;
+    background: #FFFFFF;
+}
+
+.el-dialog__title {
+    font-size: 16px;
+    line-height: 16px;
+    font-weight: 600;
+}
+
+.el-dialog__header {
+    border-bottom: 1px solid #E9E9E9;
+}
+
+.el-pagination {
+    float: right;
+    margin: 24px 0 32px 0;
+
+    .btn-prev,
+    .btn-next,
+    .btn-quicknext {
+        width: 32px;
+        height: 32px;
+        border-radius: 6px !important;
+        text-align: center;
+        line-height: 32px;
+        background: #fff !important;
+        border: 1px solid rgba(0, 0, 0, 0.15);
+    }
+
+    .el-pager {
+        .number {
+            width: 32px;
+            height: 32px;
+            border-radius: 6px !important;
+            text-align: center;
+            line-height: 32px;
+            background: #fff !important;
+            border: 1px solid rgba(0, 0, 0, 0.15);
+        }
+
+        li.active+li {
+            border-left: 1px solid rgba(0, 0, 0, 0.15) !important;
+        }
+
+        .active {
+            border: none;
+            background: #5C6AC4 !important;
+        }
+    }
+}
+
+.header-row-class-name {
+    color: red !important;
+}
