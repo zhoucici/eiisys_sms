@@ -57,37 +57,44 @@ let router = [
                 icon:"temp",
                 component:resolve => require(["@/views/template-manage/page-template.vue"],resolve),
             },
-             //概览页
+             //秘钥管理
             {
                 path: 'key-manage',
                 name: 'key-manage',
                 title:"秘钥管理",
                 icon:"key",
-                component:resolve => require(["@/views/home/page-home.vue"],resolve),
+                component:resolve => require(["@/views/key-manage/page-key.vue"],resolve),
             },
-             //概览页
+             //短信发送记录
             {
                 path: 'sms-record',
                 name: 'sms-record',
                 title:"短信发送记录",
                 icon:"smsRecord",
-                component:resolve => require(["@/views/home/page-home.vue"],resolve),
+                component:resolve => require(["@/views/sms-record/page-sms-record.vue"],resolve),
             },
-             //概览页
+             //发送量统计
             {
                 path: 'send-data',
                 name: 'send-data',
                 title:"发送量统计",
                 icon:"data",
-                component:resolve => require(["@/views/home/page-home.vue"],resolve),
+                component:resolve => require(["@/views/send-data/page-sendData.vue"],resolve),
             },
-            //概览页
+            //费用统计
             {
-                path: 'pay-data',
+                path: 'sen-data',
                 name: 'pay-data',
                 title:"费用统计",
                 icon:"pay",
-                component:resolve => require(["@/views/home/page-home.vue"],resolve),
+                component:resolve => require(["@/views/pay-data/page-payData.vue"],resolve),
+            },
+            //个人信息页
+            {
+                path: 'userInfo',
+                name: 'userInfo',
+                title:"个人信息",
+                component:resolve => require(["@/views/userInfo/page-userInfo.vue"],resolve),
             },
         ]
     }

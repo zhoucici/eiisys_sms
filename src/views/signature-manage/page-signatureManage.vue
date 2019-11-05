@@ -179,6 +179,7 @@ export default {
     //要传进添加签名里面的方法
     func(){
       this.pageIndex=!this.pageIndex
+      this.getdata(1)
     },
     //添加签名方法
     addsignature(val){

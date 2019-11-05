@@ -7,12 +7,16 @@ export default new Vuex.Store({
   state: {
     userInfo: {},    // 个人信息存储
     SmsType:[],       //短信类型存储
-    License:[]        //营业执照
+    License:[],        //营业执照
+    userGroupList:[]
   },
   mutations: {
     // 变更userInfo状态
     changeUserInfo(state, obj) {
       state.userInfo = obj;
+    },
+    changeuserGroup(state,obj){
+      state.userGroupList = obj;
     },
     changeSmsType(state,obj) {
             state.SmsType = obj;
@@ -22,6 +26,26 @@ export default new Vuex.Store({
     }
   },
   actions: {
+    // 拉取分组信息
+    getUserGroup({ commit, state }, flag = false) {
+
+      if (flag || state.userGroupList.length<=0) {
+        return $http.post("/sms/userGroup/list")
+          .then(res => {
+            var info = res.data || {};
+            if (res.code != '000000') {   //session过期
+              return Promise.resolve({})
+            }
+
+            commit('changeuserGroup', info);
+            // console.log(`用户信息：拉取`);
+            return Promise.resolve(JSON.parse(JSON.stringify(info)))
+
+          });
+      }
+      // console.log(`用户信息：缓存`);
+      return Promise.resolve(JSON.parse(JSON.stringify(state.userGroupList)))
+    },
     // 拉取用户数据
     getUserInfo({ commit, state }, flag = false) {
 

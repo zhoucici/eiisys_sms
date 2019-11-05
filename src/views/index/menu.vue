@@ -29,7 +29,7 @@ export default {
   computed: {
     main_menu() {
       //主菜单
-      return routerConfig.find(item => item.key == "menu_list").children;
+      return routerConfig.find(item => item.key == "menu_list").children.slice(0,8);
     }
   },
 
@@ -59,11 +59,13 @@ export default {
             },
     //根据路由，安排菜单选项active状态
     menuChange(route) {
+      let index=100
       this.main_menu.map((val, i) => {
         if (val.name == route.name) {
-          this.nowIndex = i;
+          index=i
         }
       });
+      this.nowIndex =index
     }
   }
 };

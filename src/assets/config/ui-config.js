@@ -28,7 +28,7 @@ import {
     // Cascader,
     // Carousel,
     // CarouselItem,
-    // Popover,
+    Popover,
     // Tabs,
     // TabPane,
     // ColorPicker,
@@ -56,4 +56,4 @@ Vue.use(DatePicker)
 Vue.use(RadioGroup)
 Vue.use(RadioButton)
 // Vue.use(TableColumn)
-// Vue.use(Table)
+Vue.use(Popover)

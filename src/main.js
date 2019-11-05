@@ -38,6 +38,12 @@ Vue.prototype.errorTip = errorTip;
 //----------------------------------
 
 
+// 引入地址配置
+import $url from '@/assets/config/address-config.js'
+Vue.prototype.$url = $url;
+//----------------------------------
+
+
 
 Vue.config.productionTip = false
 

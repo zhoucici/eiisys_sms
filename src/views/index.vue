@@ -24,9 +24,6 @@ export default {
   },
 
   computed: {
-    user() {
-      return this.$store.getters.userInfo;
-    },
     avatar() {
       return this.user.headerUrl || "~@/assets/img/avatar.svg";
     }
