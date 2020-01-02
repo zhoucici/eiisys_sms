@@ -9,14 +9,15 @@
   >
     <div class="item">
       <label>公司名称：</label>
-      <el-input size="small" style="width:436px" v-model="data.name"></el-input>
+      <el-input size="small" style="width:436px" v-model="data.name " maxlength="100"
+              show-word-limit></el-input>
     </div>
     <div class="item">
       <label>营业执照：</label>
 
       <el-image
         style="width: 100px; height: 100px;vertical-align: top;"
-        :src="imgsrc"
+        :src="imgsrc ||'/img/img.svg'"
         :previewSrcList="imgsrc=='/img/img.svg'? []:[imgsrc]"
       ></el-image>
 
@@ -28,7 +29,7 @@
       <div class="z-btn normal" @click="clearPop">取 消</div>
     </span>
     <!-- 文件选择器 -->
-    <input type="file" ref="file" v-show="false" @change="fileChange" />
+    <input type="file" ref="file" accept=".jpg, .jpeg" v-show="false" @change="fileChange" />
   </el-dialog>
 </template>
 <script>
@@ -55,7 +56,7 @@ export default {
       handler(val) {
         if (this.data.type == 1) {
           this.title = "添加营业执照";
-          this.imgsrc = "/img/img.svg";
+          (!val.businessLicensePic)&&(this.imgsrc = "/img/img.svg");
         } else {
           this.title = "修改营业执照";
           this.imgsrc = val.businessLicensePic;
@@ -77,10 +78,12 @@ export default {
         console.log(file);
 
         if (file.type != "image/jpeg") {
-          alert("只支持jpg格式");
+          this.errorTip('只支持jpg格式！')
+          return
         }
         if (file.size > 1024 * 1024) {
-          alert("图片大小 大于2MB！");
+          this.errorTip("图片大小 大于2MB！")
+          return
         }
         this.data.file = file;
         this.imgsrc = this.getObjectURL(file);
@@ -103,36 +106,42 @@ export default {
     },
 
     save() {
-      console.log(this.data);
       let formData = new FormData();
-      
       if (this.data.type == 1) {
         formData.append("file", this.data.file);
-      formData.append("companyName", this.data.name);
+        formData.append("companyName", this.data.name);
+        if (!this.data.name) {
+            this.errorTip('请填写公司名称！')
+            return
+        }
+        if(!this.data.file){
+          this.errorTip('请上传营业执照！')
+            return
+        }
         let url = "/business/save";
         this.$http.post(url, formData).then(res => {
           console.log(res);
-          if ((res.code = "000000")) {
-            alert(res.message);
+          if (res.code == "000000") {
+            this.successTip(res.message);
             this.$emit("success");
             this.clearPop();
           } else {
-            alert(res.message);
+            this.errorTip(res.message);
           }
         });
       } else {
         formData.append("id", this.data.id);
-        this.data.file? formData.append("file", this.data.file):null;
+        this.data.file&& formData.append("file", this.data.file)
         formData.append("companyName", this.data.name);
         let url = '/business/update'
         this.$http.post(url,formData)
         .then(res=>{
-            if(res.code='000000'){
-              alert(res.message)
+            if(res.code=='000000'){
+              this.successTip('修改成功！')
               this.$emit("success")
               this.clearPop()
             }else{
-              alert(res.message)
+              this.errorTip(res.message)
             }
         })
       }
@@ -148,6 +157,9 @@ export default {
 .item {
   & + .item {
     margin-top: 20px;
+  }
+  /deep/.el-input__inner{
+    padding-right: 60px;
   }
 }
 

@@ -49,7 +49,7 @@
         <div class="item-content">{{data.receiveMessage}}</div>
       </div>
       <div class="item">
-        <label>错误说明：</label>
+        <label>说明：</label>
         <div class="item-content">{{data.receiveDescription}}</div>
       </div>
     </div>

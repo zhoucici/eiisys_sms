@@ -29,14 +29,16 @@ export default {
   computed: {
     main_menu() {
       //主菜单
-      return routerConfig.find(item => item.key == "menu_list").children.slice(0,8);
+      return routerConfig
+        .find(item => item.key == "menu_list")
+        .children.slice(0, 8);
     }
   },
 
   watch: {
-    "$route"(to){
-				this.menuChange(to);
-			}
+    $route(to) {
+      this.menuChange(to);
+    }
   },
 
   created() {
@@ -54,18 +56,21 @@ export default {
         return "/menu-icon/" + icon + "_n.svg";
       }
     },
-            linkTo(name){   //跳链
-                this.$router.push({name:name});
-            },
+    linkTo(name) {
+      //跳链
+       if (this.$route.name != name) {
+        this.$router.push({ name: name });
+      }
+    },
     //根据路由，安排菜单选项active状态
     menuChange(route) {
-      let index=100
+      let index = 100;
       this.main_menu.map((val, i) => {
         if (val.name == route.name) {
-          index=i
+          index = i;
         }
       });
-      this.nowIndex =index
+      this.nowIndex = index;
     }
   }
 };
@@ -87,7 +92,7 @@ export default {
     line-height: 14px;
     color: #212b36;
     position: relative;
-    &:last-child{
+    &:last-child {
       margin-bottom: 0px;
     }
     span {

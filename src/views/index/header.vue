@@ -1,13 +1,13 @@
 <template>
   <div class="header">
-    <img class="logo" src="@/assets/img/logo.svg" alt />
+    <img @click="logo" class="logo" src="@/assets/img/logo.svg" alt />
     <div class="right">
-      <el-popover placement="bottom" :visible-arrow="false" trigger="click">
+      <el-popover placement="bottom" :visible-arrow="false" trigger="hover">
         <div class="popover">
           <div class="item">
             <span class="user">用户名</span>
             <br />
-            <span class="account">{{$store.state.userInfo.account}}</span>
+            <span class="account">{{$store.state.userInfo.loginAccount}}</span>
           </div>
           <div class="item">
             <span class="title" @click="jumpto('userInfo','1')">账户信息</span>
@@ -15,47 +15,51 @@
             <span @click="jumpto('userInfo','2')" class="title">个人信息</span>
           </div>
           <div class="item">
-            <span @click="jumpLogout" class="title">退出账号</span>
+            <span @click="jumpLogout" class="out">退出账号</span>
           </div>
         </div>
-        <div slot="reference"></div>
+        <img class="headImg" slot="reference" :src="$store.state.userInfo.headerUrl||'/img/header.svg'" alt="">
       </el-popover>
 
-      <div class="front"></div>
-      <div class="help"></div>
+      <div class="help" @click="$func.openLinkTo($url.sms_front+'/sms-document.html')"></div>
+      <div @click="$func.openLinkTo($url.sms_front)" class="front"></div>
     </div>
   </div>
 </template>
 <script>
 export default {
-  data(){
-    return{
-
-    }
+  data() {
+    return {};
   },
   methods: {
-    jumpto(val,index){
-      console.log();
-      
-      if(val==this.$router.currentRoute.name){
-        this.$parent.$children[2].index=index
-      }else{
-        this.$router.push({name:val,params: { id:index }})
+    logo(){
+        if ('home' == this.$router.currentRoute.name) {
+      } else {
+        this.$router.push({ name: 'home' });
       }
-      
     },
-    jumpLogout(){
-                sessionStorage.clear()
-                window.location.href = `${this.$url.eiisys_smsindex}?action=logout`
-            }
-  },
-}
+    jumpto(val, index) {
+      console.log();
+
+      if (val == this.$router.currentRoute.name) {
+        this.$parent.$children[2].index = index;
+      } else {
+        this.$router.push({ name: val, params: { id: index } });
+      }
+    },
+    jumpLogout() {
+      sessionStorage.clear();
+      window.location.href = `${this.$url.sms_front}?action=logout`;
+    }
+  }
+};
 </script>
 <style lang="less" scoped>
 .header {
   height: @g_header_h;
   background: @g_header_b;
   .logo {
+    cursor: pointer;
     margin: 8px 0px 8px 16px;
     height: 40px;
     width: 158px;
@@ -65,13 +69,15 @@ export default {
     margin: 12px 32px 12px 0px;
     .clear();
     .el-popover__reference {
+      width: 32px;
+      height: 32px;
       border-radius: 50%;
       padding: 0;
       background: #d7d7d7;
       margin: 0px;
     }
     div {
-      float: right;
+      float: left;
       width: 32px;
       height: 32px;
       padding: 4px;
@@ -103,28 +109,57 @@ export default {
   }
 }
 .popover {
+  width: 274px;
+  height: 216px;
+
+  background: #ffffff;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.32);
+  border-radius: 4px;
   .item {
-    &:last-child{
-      border-bottom:none;
+    width: 100%;
+    padding: 16px 24px;
+    &:first-child {
+      padding: 24px 24px;
     }
-    padding: 5px 0;
+    &:last-child {
+      border-bottom: none;
+      padding: 8px 24px 16px 24px;
+    }
     border-bottom: 1px solid #dfe3e8;
-    font-family: PingFangSC;
     .user {
+      display: inline-block;
+      margin-bottom: 4px;
       font-size: 16px;
-      line-height: 24px;
-      font-weight: 600;
+      line-height: 16px;
+      font-weight: 500;
       color: #1e2b37;
     }
     .account {
       font-size: 12px;
-      line-height: 20px;
+      line-height: 12px !important;
       color: #637381;
     }
     .title {
+      &:hover {
+        color: #202e78;
+      }
+      display: inline-block;
       cursor: pointer;
       font-size: 14px;
-      line-height: 30px;
+      line-height: 14px;
+      color: #637381;
+      margin-bottom: 16px;
+      &:last-child {
+        margin-bottom: 0;
+      }
+    }
+    .out {
+      cursor: pointer;
+      &:hover {
+        color: #202e78;
+      }
+      font-size: 14px;
+      line-height: 14px;
       color: #637381;
     }
   }

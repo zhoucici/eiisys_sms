@@ -36,7 +36,7 @@ let router = [
              //短信发送
             {
                 path: 'sms-sending',
-                name: 'smsSending',
+                name: 'sms-sending',
                 title:"短信发送",
                 icon:"sms",
                 component:resolve => require(["@/views/sms-sending/page-smsSending.vue"],resolve),
@@ -83,7 +83,7 @@ let router = [
             },
             //费用统计
             {
-                path: 'sen-data',
+                path: 'pay-data',
                 name: 'pay-data',
                 title:"费用统计",
                 icon:"pay",
@@ -103,9 +103,9 @@ let router = [
 
   // 开发模式 补充个重定向
 let r_wait = router.find(item=>item.name == 'wait');
-if( model != 3 && r_wait){
-    r_wait.redirect = {name:'login'}
-}
+// if( model != 3 && r_wait){
+//     r_wait.redirect = {name:'login'}
+// }
 
 //开发和测试环境补一个登陆界面
 if(model == 1 || model == 2){

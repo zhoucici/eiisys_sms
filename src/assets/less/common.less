@@ -4,6 +4,25 @@ body,
 #app {
     height: 100%;
 }
+textarea:-ms-input-placeholder{
+    color: #99A4AD!important;
+}
+
+input::-webkit-input-placeholder{
+    color: #99A4AD!important;
+}
+
+input:-moz-placeholder {
+    color: #99A4AD!important;
+
+}
+input::-moz-placeholder {
+    color: #99A4AD!important;
+}
+input:-ms-input-placeholder {
+    color: #99A4AD!important;
+}
+
 
 body,
 p,
@@ -26,6 +45,12 @@ a {
     box-sizing: border-box;
 }
 
+.search-item {
+    label {
+        font-size: 14px;
+    }
+}
+
 //页面表格
 .page-list {
     color: rgba(0, 0, 0, 0.65);
@@ -37,7 +62,7 @@ a {
         border-bottom: 1px solid #E9E9E9;
         font-family: PingFangSC;
         font-size: 14px;
-        font-weight: 600;
+        font-weight: 500;
     }
 
     .list-head,
@@ -49,7 +74,6 @@ a {
             text-overflow: ellipsis;
             float: left;
             padding-left: 16px;
-            text-overflow: ellipsis;
             white-space: nowrap;
         }
     }
@@ -87,7 +111,7 @@ a {
         color: #1E2B37;
         height: 52px;
         border-bottom: 1px solid #DFE3E8;
-        font-weight: 600;
+        font-weight: 500;
         padding-left: 16px;
     }
 
@@ -128,7 +152,7 @@ a {
 
     &.unclick {
         cursor: not-allowed;
-        
+
     }
 
     //次要按钮
@@ -145,15 +169,17 @@ a {
             background: #CDD1D4;
         }
     }
-    &.red{
-        background: #F5222D;
-        &:hover {
-                background: rgba(255, 82, 87);
-            }
 
-            &:active {
-                background: rgba(210, 35, 39, 1);
-            }
+    &.red {
+        background: #F5222D;
+
+        &:hover {
+            background: rgba(255, 82, 87);
+        }
+
+        &:active {
+            background: rgba(210, 35, 39, 1);
+        }
     }
 
     //文字按钮
@@ -163,19 +189,25 @@ a {
         display: inline;
         color: #007ACE;
         background: none;
-        &.disabled{
-            cursor: not-allowed;
-            pointer-events: none;
-            color: #C2CDD6;
+
+        &.disabled {
+            
+            // pointer-events: none;
+            cursor: not-allowed!important;
+            color: #C2CDD6!important;
         }
+
         &.red {
+            background: none!important;
             color: rgba(255, 82, 87, 1); //红字按钮
 
             &:hover {
+                background: none!important;
                 color: rgba(255, 82, 87, 0.6);
             }
 
             &:active {
+                background: none!important;
                 color: rgba(210, 35, 39, 1);
             }
         }
@@ -204,7 +236,7 @@ a {
         span {
             vertical-align: middle;
             color: rgba(0, 0, 0, 0.85);
-            font-weight: 600;
+            font-weight: 500;
         }
     }
 }
@@ -235,7 +267,7 @@ a {
 .el-dialog__title {
     font-size: 16px;
     line-height: 16px;
-    font-weight: 600;
+    font-weight: 500;
 }
 
 .el-dialog__header {
@@ -260,11 +292,11 @@ a {
 
     .el-pager {
         .number {
-            width: 32px;
+            min-width: 32px!important;
             height: 32px;
             border-radius: 6px !important;
             text-align: center;
-            line-height: 32px;
+            line-height: 30px;
             background: #fff !important;
             border: 1px solid rgba(0, 0, 0, 0.15);
         }
@@ -283,3 +315,65 @@ a {
 .header-row-class-name {
     color: red !important;
 }
+
+.el-popper {
+    padding: 0 !important;
+}
+
+.el-input__inner {
+    font-size: 14px;
+    color: #1E2B37;
+    padding: 0 12px;
+}
+.el-image-viewer__mask{
+    background: #fff;
+}
+.el-icon-circle-close{
+    color: #000;
+}
+.el-textarea__inner{
+    padding-right: 35px;
+}
+.el-checkbox .is-disabled{
+    cursor: not-allowed!important;
+    .el-checkbox__input .is-disabled{
+        cursor: not-allowed!important;
+    }
+    .el-checkbox__inner{
+        cursor: not-allowed!important;
+    }
+    input{
+        cursor: not-allowed!important;
+    }
+    .el-checkbox__inner::after{
+        cursor: not-allowed!important;
+    }
+    span{
+        cursor: not-allowed!important;
+    }
+}
+.smsContent{
+    white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.el-textarea__inner{
+    color: #212B36!important;
+    font-size: 14px;
+}
+
+input::-webkit-outer-spin-button,
+    input::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+    }
+    input[type="number"]{
+        -moz-appearance: textfield;
+    }
+
+    .el-month-table td.today .cell{
+        font-weight: 400;
+        color: #606266;
+    }
+    .el-month-table td.current:not(.disabled) .cell{
+        font-weight: 700;
+    }

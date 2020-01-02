@@ -29,7 +29,9 @@ export default {
     }
   },
 
-  created() {},
+  created() {
+    this.$store.dispatch('getUserInfo')
+  },
   mounted() {},
   methods: {}
 };
@@ -42,14 +44,15 @@ export default {
 }
 .main{
   height:calc(~"100% - @{g_header_h}");
-  
+  position: relative;
   .page-left{
     float: left;
     
   }
   .page-right{
-    float: left;
-    position: relative;
+    position: absolute;
+    top: 0px;
+    left: 200px;
     background: #f0f2f5;
     height:100%;
     width: calc(~"100% -  @{g_menu_w}");

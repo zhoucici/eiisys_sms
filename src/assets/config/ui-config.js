@@ -29,12 +29,12 @@ import {
     // Carousel,
     // CarouselItem,
     Popover,
-    // Tabs,
     // TabPane,
     // ColorPicker,
     Dialog,
     CollapseTransition,
     Tabs,
+    Tag,
     TabPane
 } from 'element-ui'
 Vue.prototype.$message = Message;
@@ -57,3 +57,4 @@ Vue.use(RadioGroup)
 Vue.use(RadioButton)
 // Vue.use(TableColumn)
 Vue.use(Popover)
+Vue.use(Tag)

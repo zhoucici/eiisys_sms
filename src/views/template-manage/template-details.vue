@@ -18,7 +18,11 @@
       </div>
       <div class="item">
         <label>模板类型：</label>
-        <div class="item-content">{{data.smsType}}</div>
+        <div class="item-content">{{ getSmsType(data.smsType)}}</div>
+      </div>
+      <div v-if="data.smsType==4" class="item">
+        <label>行业类型：</label>
+        <div class="item-content">{{industryId}}</div>
       </div>
       <div class="item">
         <label>模板内容：</label>
@@ -46,8 +50,12 @@
       <div class="item">
         <label>审核说明：</label>
 
-        
         <div class="item-content">{{data.reason}}</div>
+      </div>
+      <div v-if="data.examine==2" class="item">
+        <label>失败说明：</label>
+
+        <div class="item-content">{{data.reviewDesc||'--'}}</div>
       </div>
     </div>
     <span slot="footer" class="dialog-footer">
@@ -58,7 +66,10 @@
 <script>
 export default {
   data() {
-    return {};
+    return {
+      industryList:[],
+      SmsTypeList:[]
+    }; 
   },
   model: {
     prop: "show_flag",
@@ -70,6 +81,31 @@ export default {
       type: Boolean
     },
     data: {}
+  },
+  watch: {
+    data(val){
+      //获取行业
+    this.getIndustry() 
+    }
+  },
+  computed: {
+    getSmsType() {
+      return function(val) {
+        this.SmsTypeList.map(item => {
+          if (item.type == val) {
+            name = item.name;
+          }
+        });
+        return name;
+      };
+    },
+    industryId(val){
+      let value='--'
+      this.industryList.map(val=>{
+        (this.data.industryId==val.id)&&(value=val.name)
+      })
+      return value
+    },
   },
   filters: {
     status(val) {
@@ -84,19 +120,29 @@ export default {
           return "审核中";
           break;
       }
-    }
+    },
   },
-  watch: {
-    data(val) {
-      console.log(this.$parent.$parent);
-
-      val.smsType = this.$parent.$parent.getSmsType(val.smsType);
-    }
+  created() {
+    //获取短信类型
+    this.$store.dispatch("getSmsType").then(res => {
+      this.SmsTypeList = res;
+    })
   },
   methods: {
     clearPop() {
       this.$emit("change", false);
-    }
+    },
+    //获取行业
+    getIndustry(func) {
+      let url = `/industry/all`;
+      this.$http.post(url).then(res => {
+        if (res.code == "000000") {
+          console.log(res);
+          
+          this.industryList = res.data;
+        }
+      });
+    },
   }
 };
 </script>
@@ -114,9 +160,9 @@ export default {
       text-align: right;
       vertical-align: top;
     }
-    .item-content{
+    .item-content {
       display: inline-block;
-      width: calc(~'100% - 85px')
+      width: calc(~"100% - 85px");
     }
     & + .item {
       margin-top: 12px;

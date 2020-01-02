@@ -1,15 +1,15 @@
 <template>
-  <z-page title="添加模板" :func="func">
+  <z-page :title="data.type==1?'添加模板':'修改模板'" :func="func">
     <el-row class="card">
       <el-col :span="12">
         <div class="content-item">
           <label>模板名称：</label>
           <div class="item-content">
             <el-input
-              placeholder="请输入名称，不超过30个字符"
+              placeholder="请输入模板名称，不超过30个全角或半角字符"
               v-model="data.templateName"
               size="small"
-              maxlength="8"
+              maxlength="30"
               show-word-limit
             ></el-input>
           </div>
@@ -19,16 +19,17 @@
           <label>模板类型：</label>
           <div class="item-content">
             <el-select
+            :popper-append-to-body='false'
               :disabled="data.type==2"
               style="width:100%"
               size="small"
               v-model="data.smsType"
-              placeholder="请选择"
+              placeholder="请选择模板类型"
             >
               <el-option
                 v-for="(item, index) in SmsTypeList"
                 :key="index"
-                :value="item.id"
+                :value="item.type"
                 :label="item.name"
               ></el-option>
             </el-select>
@@ -38,14 +39,16 @@
           <label>行业类型：</label>
           <div class="item-content">
             <el-select
+            :popper-append-to-body='false'
               :disabled="data.type==2"
               style="width:100%"
               size="small"
               v-model="data.industryId"
-              placeholder="请选择"
+              placeholder="请选择行业类型"
             >
               <el-option
                 v-for="(item, index) in industryList"
+                :title="item.name"
                 :key="index"
                 :value="item.id"
                 :label="item.name"
@@ -57,7 +60,7 @@
         <div class="content-item">
           <label>所属用户组：</label>
           <div class="item-content">
-            <el-select style="width:100%" size="small" v-model="data.groupId" placeholder="请选择">
+            <el-select :popper-append-to-body='false' style="width:100%" size="small" v-model="data.groupId" placeholder="请选择所属用户组">
               <el-option
                 v-for="(item, index) in userGrounp"
                 :key="index"
@@ -77,19 +80,22 @@
               maxlength="500"
               show-word-limit
               v-model="data.templateContent"
-            ></el-input>快速获得可用模版，使用
-            <font @click="asd()" class="z-btn text">常用模版库</font>
-            <br />
+            ></el-input>
+            <div style="padding-bottom:10px;margin-top:5px">
+              快速获得可用模版，使用
+            <font  @click="data.type==2?null:asd()"  :class="{disabled:data.type==2}" class="z-btn text">常用模版库</font>
+            </div>
+            
             <span>·&nbsp;验证码模版支持验证码作为变量；变量替换值＜＝20位数字或字母</span>
             <br />
             <span>
-              ·&nbsp;不能发送营销／贷款／借款／中奖／抽奖类短信，不支持金融理财&
-              房产通知类短信（验证码除外）
+              ·&nbsp;不能发送营销／贷款／借款／中奖／抽奖类短信，不支持金融理财房产通知类短信（验证码除外）
             </span>
             <br />
             <span>
               ·&nbsp;
-              <font class="z-btn text">签名／模版申请规范</font>详情
+              <!-- <font class="z-btn text">签名／模版申请规范</font> -->
+              签名／模版申请规范详情
             </span>
           </div>
         </div>
@@ -102,17 +108,19 @@
               type="textarea"
               placeholder="请输入描述您的业务场景"
               v-model="data.reason"
+              maxlength="200"
+              show-word-limit
             ></el-input>
           </div>
         </div>
         <div class="content-item">
           <label></label>
           <div class="item-content">
-            <div @click="check()" class="z-btn">确&nbsp;定</div>
+            <div @click="check()" style="margin-bottom:10px" class="z-btn">确&nbsp;定</div>
             <br />
-            <span>·&nbsp;预计XX时间完成审核</span>
+            <span>·&nbsp;预计三天时间完成审核</span>
             <br />
-            <span>·&nbsp;审核工作时间：周一至周日9:00-23:00（法定节假日顺延）</span>
+            <span>·&nbsp;审核工作时间：周一至周五9:00-18:00（法定节假日顺延）</span>
           </div>
         </div>
       </el-col>
@@ -135,7 +143,7 @@ export default {
     return {
       SmsTypeList: [],
       userGrounp: [],
-
+      saveBtn_flag:true,
       industryList: []
     };
   },
@@ -149,13 +157,16 @@ export default {
     //监听短信类型，如果短信类型为4 那么出现行业类型
     "data.smsType"(val) {
       if (val == "4") {
+        // this.$set(this.data,'industryId','')
         this.getIndustry();
       } else {
-        this.data.industryId = null;
+        // this.$set(this.data,'industryId','')
       }
+
     }
   },
   created() {
+     this.$set(this.data,'templateContent',this.data.templateContent)
     //获取短信类型
     this.$store.dispatch("getSmsType").then(res => {
       this.SmsTypeList = res;
@@ -187,8 +198,9 @@ export default {
         templateName: "模板名称",
         smsType: "模板类型",
         groupId: "所属用户组",
-        reason: "申请说明",
-        templateContent: "模板内容"
+        
+        templateContent: "模板内容",
+        reason: "申请说明"
       };
       if (this.data.smsType == "4") {
         tip.industryId = "行业类型";
@@ -203,14 +215,16 @@ export default {
     },
     //保存方法
     save() {
-      //1 新建  2 成功修改  3失败修改
+      if (this.saveBtn_flag) {
+        this.saveBtn_flag=false
+        //1 新建  2 成功修改  3失败修改
       if (this.data.type == 1) {
         let url = `/template/add`;
         this.$http
           .post(url, {
             groupId: this.data.groupId,
             industryId:
-              this.data.templateName == "4" ? this.data.industryId : null,
+              this.data.smsType == "4" ? this.data.industryId : null,
             reason: this.data.reason,
             smsType: this.data.smsType,
             templateContent: this.data.templateContent,
@@ -219,11 +233,13 @@ export default {
           .then(res => {
             if (res.code == "000000") {
               this.successTip("添加成功");
-              this.$parent.pageIndex = 1;
               this.$parent.getdata(1);
+              this.$parent.pageIndex = 1;
+              
             } else {
               this.errorTip("添加失败");
             }
+            this.saveBtn_flag=true
           });
       } else {
         if (this.data.type == 2) {
@@ -238,20 +254,22 @@ export default {
             .then(res => {
               if (res.code == "000000") {
                 this.successTip("修改成功");
-                this.$parent.pageIndex = 1;
-                this.$parent.$refs.multipleTable.clearSelection();
                 this.$parent.getdata(1);
+                this.$parent.pageIndex = 1;
+                
+                this.$parent.$refs.multipleTable.clearSelection();
+                
               } else {
                 this.errorTip("修改失败");
               }
+              this.saveBtn_flag=true
             });
         } else {
-            
           let url = `/template/unAudit/update`;
           this.$http.post(url, {
               id: this.data.id,
             groupId: this.data.groupId,
-            industryId:this.data.templateName == "4" ? this.data.industryId : null,
+            industryId:this.data.smsType == "4" ? this.data.industryId : null,
             reason: this.data.reason,
             smsType: this.data.smsType,
             templateContent: this.data.templateContent,
@@ -260,15 +278,19 @@ export default {
           .then(res=>{
               if (res.code == "000000") {
                 this.successTip("修改成功");
+                this.$parent.getdata(1);
                 this.$parent.pageIndex = 1;
                 this.$parent.$refs.multipleTable.clearSelection();
-                this.$parent.getdata(1);
+                
               } else {
                 this.errorTip(res.message);
               }
+              this.saveBtn_flag=true
           })
         }
       }
+      }
+      
     }
   }
 };
@@ -379,5 +401,15 @@ export default {
       color: #005c9c !important;
     }
   }
+}
+/deep/.el-input__inner{
+  padding-right: 45px;
+}
+/deep/.el-scrollbar__view .el-select-dropdown__list{
+  width: 50%;
+  overflow: hidden;
+}
+/deep/ .el-select-dropdown{
+  width: 100%;
 }
 </style>

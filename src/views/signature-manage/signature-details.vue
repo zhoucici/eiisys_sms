@@ -18,7 +18,11 @@
       </div>
       <div class="item">
         <label>签名类型：</label>
-        <div class="item-content">{{data.smsType}}</div>
+        <div class="item-content">{{data.smsType|smsType}}</div>
+      </div>
+      <div v-if="data.smsType==4" class="item">
+        <label>行业类型：</label>
+        <div class="item-content">{{industryId}}</div>
       </div>
       <div class="item">
         <label>短信内容：</label>
@@ -34,15 +38,13 @@
         <div class="item-content">
           <span
             class="status"
-            :class="{green:data.status==1,red:data.status==2,yellow:data.status==0}"
+            :class="{green:data.examine==1,red:data.examine==2,yellow:data.examine==0}"
           ></span>
-          &nbsp;{{data.status|status}}
+          &nbsp;{{data.examine|status}}
         </div>
       </div>
       <div class="item">
         <label>审核说明：</label>
-
-        
         <div class="item-content">{{data.reason}}</div>
       </div>
       <div class="item">
@@ -58,7 +60,9 @@
 <script>
 export default {
   data() {
-    return {};
+    return {
+      industryList:[]
+    };
   },
   model: {
     prop: "show_flag",
@@ -70,6 +74,15 @@ export default {
       type: Boolean
     },
     data: {}
+  },
+  computed: {
+    industryId(val){
+      let value='--'
+      this.industryList.map(val=>{
+        (this.data.industryId==val.id)&&(value=val.name)
+      })
+      return value
+    },
   },
   filters: {
     status(val) {
@@ -84,19 +97,44 @@ export default {
           return "审核中";
           break;
       }
+    },
+    smsType(val){
+      switch (val) {
+        case 1:
+          return "通知类短信";
+          break;
+        case 2:
+          return "营销类短信";
+          break;
+        case 3:
+          return "验证码短信";
+        case 4:
+          return "行业短信";
+          break;
+      }
     }
   },
   watch: {
     data(val) {
-      console.log(this.$parent.$parent);
-
-      val.smsType = this.$parent.$parent.getSmsType(val.smsType);
+      this.getIndustry() 
+      
     }
   },
   methods: {
     clearPop() {
       this.$emit("change", false);
-    }
+    },
+    //获取行业
+    getIndustry(func) {
+      let url = `/industry/all`;
+      this.$http.post(url).then(res => {
+        if (res.code == "000000") {
+          console.log(res);
+          
+          this.industryList = res.data;
+        }
+      });
+    },
   }
 };
 </script>

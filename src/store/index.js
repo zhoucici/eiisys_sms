@@ -30,7 +30,7 @@ export default new Vuex.Store({
     getUserGroup({ commit, state }, flag = false) {
 
       if (flag || state.userGroupList.length<=0) {
-        return $http.post("/sms/userGroup/list")
+        return $http.post("/userGroup/list")
           .then(res => {
             var info = res.data || {};
             if (res.code != '000000') {   //session过期

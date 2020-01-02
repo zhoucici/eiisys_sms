@@ -1,6 +1,8 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
+import axios from 'axios'
 import $store from '@/store/index.js'
+import $url from '@/assets/config/address-config.js'
 //引入路由配置
 import routeConfig from './router-config.js'
 Vue.use(VueRouter)
@@ -17,7 +19,6 @@ router.beforeEach((to, from, next) => {
   // 带token登录时，获取token
   let onceToken = to.query.token;
   if (onceToken) {
-
     let url = `${$url.sass}/token`
     //验证onceToken
     return axios.post(url, {
@@ -34,15 +35,18 @@ router.beforeEach((to, from, next) => {
       }],
     })
       .then(({ data: { server_response: res } }) => {
+        console.log(res);
+        
         if (res.token) {
-          sessionStorage.setItem('token', res.token);
+          sessionStorage.setItem('x-access-token', res.token);
           next()
         } else {
-          next({ name: 'error' })
+          // next({ name: 'error' })
         }
       })
       .catch(err => {
-        next({ name: 'error' })
+        window.location.href = $url.sms_front+'?action=logout'
+        // next({ name: 'error' })
       })
   }
   let pages = ['login', 'wait', 'noPermission', 'error'];
@@ -57,7 +61,7 @@ router.beforeEach((to, from, next) => {
     .then(info=>{
         if(!info.id){ //没有登录信息  登录验证
             // 跳到官网
-              window.location.href = `http://eiisys.com`
+              window.location.href = $url.sms_front
             next()
             return;
         }

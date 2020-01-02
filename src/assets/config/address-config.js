@@ -9,16 +9,25 @@ const keyObj = {
 const webUrl = {
     // 开发模式
     dev:{
+        sms_front:'http://122.112.204.156:7078',
+        sass:"https://api.saas.71baomu.com",
         eiisys_sms:'/eiisys_sms',
+        kuaifu:'http://www.71baomu.com',
         eiisys_smsindex:"https://peiisys.eiisys.com/html/eiisys-index.html",  // 海翕云对应官网
     },
     // 测试模式
     test:{
+        sass:"https://api.saas.71baomu.com",
+        kuaifu:'http://www.71baomu.com',
         eiisys_sms:'http://122.112.204.156:8290',
         eiisys_smsindex:"https://peiisys.eiisys.com/html/eiisys-index.html",  // 海翕云对应官网
+        sms_front:'http://122.112.204.156:7078'
     },
     // 线上模式
     online:{
+        kuaifu:'http://www.kuaifuwang.cn',
+        sms_front:'http://122.112.204.156:7078',
+        sass:"https://api.saas.53kf.com",
         eiisys_sms:'http://122.112.204.156:8290',
         eiisys_smsindex:"eiisys.com",  // 海翕云对应官网
     },

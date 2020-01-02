@@ -10,13 +10,13 @@
               style="width:272px;margin-right:32px"
               v-model="searchText"
               size="small"
-              placeholder="请输入内容搜索"
+              placeholder="请输入模板名称搜索"
             ></el-input>
             <div @click="getdata(1)" @clear="getdata(1)" class="z-btn">查询</div>
           </div>
           <div class="search-item">
             <div @click="addTemplate()" class="z-btn">添加模板</div>
-            <div @click="delopen()" class="z-btn red">删 除</div>
+            <div v-if="ids.length> 0" @click="delopen()" class="z-btn red">删 除</div>
           </div>
         </div>
         <el-table
@@ -29,6 +29,7 @@
         >
           <el-table-column
             :selectable="selectAble"
+            :disabled='true'
             :reserve-selection="true"
             type="selection"
             width="45"
@@ -36,13 +37,43 @@
           <el-table-column prop="templateCode" label="业务编号" min-width="120">
             <!-- <template slot-scope="scope">{{ scope.row.date }}</template> -->
           </el-table-column>
-          <el-table-column prop="templateName" label="模板名称" min-width="80"></el-table-column>
-          <el-table-column min-width="80" label="模板类型">
+          <el-table-column  prop="templateName" label="模板名称" min-width="80">
+            <template slot-scope="scope">
+              <div :title="scope.row.templateName"   class="smsContent">
+                  {{scope.row.templateName}}
+              </div>
+            </template>
+          </el-table-column>
+          <el-table-column min-width="115">
+           <template slot-scope="scope" slot="header">
+              <span>
+                短信类型
+                <span v-if="typeSelect!=null" >({{getSmsType(typeSelect)}})</span>
+              </span>
+              <img
+                style="margin-left:11px;cursor: pointer;"
+                @click="sendTypeSelect"
+                src="@/assets/img/saix.svg"
+                alt
+              />
+            </template>
             <template slot-scope="scope">{{getSmsType(scope.row.smsType)}}</template>
           </el-table-column>
           <el-table-column prop="groupName" label="所属用户组" min-width="80"></el-table-column>
           <el-table-column prop="createTime" label="创建时间" min-width="80"></el-table-column>
           <el-table-column min-width="80" label="状态">
+            <template slot-scope="scope" slot="header">
+              <span>
+                状态
+                <span v-if="statusSelect!=null">({{statusSelect|examine}})</span>
+              </span>
+              <img
+                style="margin-left:11px;cursor: pointer;"
+                @click="sendSelect"
+                src="@/assets/img/saix.svg"
+                alt
+              />
+            </template>
             <template slot-scope="scope">
               <span
                 class="status"
@@ -55,7 +86,7 @@
             <template slot-scope="scope">
               <div @click="showTemplate(scope.row)" class="z-btn text">详情</div>
               <div
-                @click="addTemplate(scope.row)"
+                @click="scope.row.examine==0?null:addTemplate(scope.row)"
                 :class="{disabled:scope.row.examine==0}"
                 class="z-btn text"
               >修改</div>
@@ -75,6 +106,7 @@
     <template-details v-model="detailsPop" :data="nowdata"></template-details>
     <!-- 删除提示 -->
     <el-dialog
+    top='30vh'
       class="pop"
       title="提示信息"
       :visible.sync="delFlag"
@@ -86,8 +118,9 @@
         <span>确定删除选中模版？</span>
       </div>
       <span slot="footer" class="dialog-footer">
-        <div class="z-btn normal" @click="()=>delFlag=false">取 消</div>
         <div class="z-btn" @click="trueDel()">确 定</div>
+        <div class="z-btn normal" @click="()=>delFlag=false">取 消</div>
+        
       </span>
     </el-dialog>
   </z-page>
@@ -106,6 +139,7 @@ export default {
   mixins: [table],
   data() {
     return {
+      statusSelect:null,  //赛选状态
       pageIndex: 1, // 1  模板管理  2 添加模板  3  常用模板库
       searchText: "",
       nowPage: 1,
@@ -115,7 +149,8 @@ export default {
       SmsTypeList: [],
       detailsPop: false,
       ids: [],
-      delFlag: false
+      delFlag: false,
+      typeSelect:null
     };
   },
   components: {
@@ -127,7 +162,7 @@ export default {
     getSmsType() {
       return function(val) {
         this.SmsTypeList.map(item => {
-          if (item.id == val) {
+          if (item.type == val) {
             name = item.name;
           }
         });
@@ -150,14 +185,55 @@ export default {
       }
     }
   },
+  destroyed(){
+    document.onkeydown=''
+  },
   created() {
     //获取短信类型
     this.$store.dispatch("getSmsType").then(res => {
       this.SmsTypeList = res;
     });
     this.getdata(1);
+    let g = this
+    document.onkeydown=function(){
+      let key = window.event.keyCode
+      if (key==13) {
+          g.getdata(1)
+          g.$forceUpdate()
+      }
+    }
   },
   methods: {
+    //短信类型赛选方法
+    sendTypeSelect(){
+
+    if (!this.typeSelect) {
+        this.typeSelect=1
+    }else if(this.typeSelect<(this.SmsTypeList.length)){
+      this.typeSelect++
+    }else if(this.typeSelect==(this.SmsTypeList.length)){
+      this.typeSelect=null
+    }
+    this.getdata(1);
+    },
+    //赛选方法
+    sendSelect(){
+      switch (this.statusSelect) {
+        case null:
+          this.statusSelect = 1;
+          break;
+        case 1:
+          this.statusSelect = 2;
+          break;
+        case 2:
+          this.statusSelect = 0;
+          break;
+        default:
+          this.statusSelect = null;
+          break;
+      }
+      this.getdata(1);
+    },
     // 选择时改变容器
     handleSelectionChange(val) {
       this.ids = val;
@@ -196,18 +272,21 @@ export default {
     },
     //查看模板详情
     showTemplate(val) {
+      console.log(val);
+      
       this.nowdata = val;
       this.detailsPop = true;
     },
     //页面切换
     handleCurrentChange(val) {
       this.nowPage = val;
+      this.$refs.multipleTable.clearSelection();
       this.getdata();
     },
     //要传进添加签名里面的方法
     func() {
       this.pageIndex = 1;
-      this.$refs.multipleTable.clearSelection();
+      this.$refs.multipleTable&&this.$refs.multipleTable.clearSelection();
     },
     gotolistfunc() {
       this.pageIndex = 2;
@@ -234,7 +313,9 @@ export default {
       this.$http
         .post(url, {
           pageNum: num || this.nowPage,
-          templateName: this.searchText
+          templateName: this.searchText,
+          examine:this.statusSelect,
+          smsType:this.typeSelect?this.SmsTypeList[this.typeSelect-1].type:undefined
         })
         .then(res => {
           this.dataList = res.data.list;
@@ -254,6 +335,7 @@ export default {
 <style lang="less" scoped>
 .card {
   margin-top: 24px;
+  margin-bottom: 24px;
   .content {
     padding: 0px 24px 24px 24px;
     .search-item {
@@ -283,5 +365,10 @@ export default {
   -moz-border-radius: 50%;
   -webkit-border-radius: 50%;
   vertical-align: middle;
+}
+.content{
+  /deep/.el-checkbox__input.is-disabled .el-checkbox__inner{
+    cursor: pointer;
+  }
 }
 </style>

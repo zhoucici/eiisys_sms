@@ -32,9 +32,10 @@ Vue.prototype.$http = instance;
 //----------------------------------
 
 //引入提示
-import { successTip,errorTip } from '@/assets/js/common.js';
+import func, { successTip,errorTip }  from '@/assets/js/common.js';
 Vue.prototype.successTip = successTip;
 Vue.prototype.errorTip = errorTip;
+Vue.prototype.$func = func;
 //----------------------------------
 
 
@@ -44,9 +45,7 @@ Vue.prototype.$url = $url;
 //----------------------------------
 
 
-
 Vue.config.productionTip = false
-
 new Vue({
   router,
   store,

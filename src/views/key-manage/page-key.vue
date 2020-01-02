@@ -35,6 +35,7 @@
     <!-- 编辑和删除 -->
     <!-- 添加 -->
     <el-dialog
+      top="30vh"
       class="pop"
       title="提示信息"
       :visible.sync="delFlag"
@@ -55,15 +56,16 @@
 
     <!-- 添加 -->
     <el-dialog
+      top="30vh"
       class="pop"
-      title="添加 App Kye"
+      title="添加 App Key"
       :visible.sync="addFlag"
       width="600px"
       :before-close="()=>addFlag=false"
     >
       <div class="tip">
         <label>所属用户组：</label>
-        <el-select style="width:350px" size="small" v-model="newgroupId" placeholder="请选择">
+        <el-select style="width:350px" size="small" v-model="newgroupId" placeholder="请选择所属用户组">
           <el-option
             v-for="(item, index) in userGrounp"
             :key="index"
@@ -85,6 +87,7 @@ export default {
   mixins: [table],
   data() {
     return {
+      btn_flag: true,
       nowPage: 1,
       total: 0,
       dataList: [], //数据容器
@@ -93,7 +96,7 @@ export default {
       nowdata: "",
       userGrounp: [], //用户分组信息
       newgroupId: "",
-      title: "是否重置该App Key"
+      title: "是否重置该App Secret"
     };
   },
   created() {
@@ -131,36 +134,42 @@ export default {
     },
     //重置和删除秘钥
     reset() {
-      if (this.type == 1) {
-        let url = `/app/reset`;
-        this.$http
-          .post(url, {
-            id: this.nowdata.id
-          })
-          .then(res => {
-            if (res.code == "000000") {
-              this.successTip("重置成功！");
-              this.getdata();
-              this.delFlag = false;
-            } else {
-              this.errorTip(res.message);
-            }
-          });
-      } else {
-        let url = `/app/delete`;
-        this.$http
-          .post(url, {
-            id: this.nowdata.id
-          })
-          .then(res => {
-            if (res.code == "000000") {
-              this.successTip("删除成功！");
-              this.getdata(1);
-              this.delFlag = false;
-            } else {
-              this.errorTip(res.message);
-            }
-          });
+      if (this.btn_flag) {
+        this.btn_flag=false
+        if (this.type == 1) {
+          let url = `/app/reset`;
+          this.$http
+            .post(url, {
+              id: this.nowdata.id
+            })
+            .then(res => {
+              if (res.code == "000000") {
+                this.successTip("重置成功！");
+                this.getdata();
+                this.delFlag = false;
+              } else {
+                this.errorTip(res.message);
+              }
+              setTimeout(()=>this.btn_flag=true,1000)
+               
+            });
+        } else {
+          let url = `/app/delete`;
+          this.$http
+            .post(url, {
+              id: this.nowdata.id
+            })
+            .then(res => {
+              if (res.code == "000000") {
+                this.successTip("删除成功！");
+                this.getdata(1);
+                this.delFlag = false;
+              } else {
+                this.errorTip(res.message);
+              }
+              setTimeout(()=>this.btn_flag=true,1000)
+            });
+        }
       }
     },
     //打开重置窗口方法 1 重置  2删除
@@ -174,25 +183,30 @@ export default {
     },
     //添加appkey方法
     trueAdd() {
-      if (!this.newgroupId) {
+      
+      if (this.btn_flag) {
+        if (!this.newgroupId) {
         this.errorTip("请选择所属用户组");
         return;
       }
-      let url = `/app/create`;
-      this.$http
-        .post(url, {
-          groupId: this.newgroupId
-        })
-        .then(res => {
-          if (res.code == "000000") {
-            this.successTip("添加成功");
-            this.getdata(1);
-            this.addFlag = false;
-            this.newgroupId = null;
-          } else {
-            this.errorTip(res.message);
-          }
-        });
+        this.btn_flag = false;
+        let url = `/app/create`;
+        this.$http
+          .post(url, {
+            groupId: this.newgroupId
+          })
+          .then(res => {
+            if (res.code == "000000") {
+              this.successTip("添加成功");
+              this.getdata(1);
+              this.addFlag = false;
+              this.newgroupId = null;
+            } else {
+              this.errorTip(res.message);
+            }
+            setTimeout(()=>this.btn_flag=true,1000)
+          });
+      }
     },
     //处理时间
     gettime(val) {
