@@ -24,7 +24,7 @@
           <el-table-column type="index" label="序号" min-width="80"></el-table-column>
           <el-table-column prop="signature" label="签名内容" min-width="80"></el-table-column>
           <el-table-column prop="phoneAmount" label="短信类型" min-width="125">
-            <template slot-scope="scope" slot="header">
+            <template slot-scope="scopeu8tr54" slot="header">
               <span>
                 短信类型
                 <span v-if="typeSelect!=null" >({{getSmsType(typeSelect)}})</span>
@@ -200,9 +200,7 @@ export default {
       }
     }
   },
-  destroyed(){
-    document.onkeydown=''
-  },
+
    created() {
     //获取短信类型
     this.$store.dispatch("getSmsType").then(res => {

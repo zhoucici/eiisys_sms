@@ -3,7 +3,7 @@
     <el-row class="card">
       <div class="content">
         <div class="page-search">
-          <div class="search-item">
+          <div class="search-item long">
             <label>统计月份：</label>
             <el-date-picker
             @change="getdata()"

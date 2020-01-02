@@ -159,9 +159,7 @@ export default {
       };
     }
   },
-  destroyed(){
-    document.onkeydown=''
-  },
+
   created() {
     let g = this
     document.onkeydown=function(){

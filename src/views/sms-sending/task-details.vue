@@ -95,9 +95,7 @@ export default {
     },
     data: {}
   },
-  destroyed(){
-    document.onkeydown=''
-  },
+
   created() {
     
     this.getinfo();

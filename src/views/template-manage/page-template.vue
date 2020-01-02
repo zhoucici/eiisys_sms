@@ -185,9 +185,7 @@ export default {
       }
     }
   },
-  destroyed(){
-    document.onkeydown=''
-  },
+
   created() {
     //获取短信类型
     this.$store.dispatch("getSmsType").then(res => {
@@ -295,10 +293,13 @@ export default {
     //1 新建  2 成功修改  3失败修改
     addTemplate(val) {
       if (val) {
+        console.log(val);
+        
         this.nowdata = val;
         this.nowdata.examine == 2
           ? (this.nowdata.type = 3)
           : (this.nowdata.type = 2);
+          this.nowdata.industryId==0?this.nowdata.industryId='':this.nowdata.industryId
       } else {
         this.nowdata = {
           type: 1
