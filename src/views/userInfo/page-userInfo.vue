@@ -106,8 +106,15 @@ export default {
   created() {
     this.index = this.$route.params.id || "1";
     this.getdata();
-    this.getchartsdata();
     this.getnowmonthdata();
+    this.getchartsdata()
+  },
+  watch:{
+    index(val){
+      if (val=='1') {
+        
+      }
+    }
   },
   methods: {
     //立即充值打开
@@ -158,6 +165,8 @@ export default {
         })
         .then(res => {
           this.chartdata = res.data;
+          console.log();
+          
         });
     },
     getstarttime() {

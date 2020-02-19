@@ -33,7 +33,4 @@ const webUrl = {
     },
 }
 
-
-
-
 export default webUrl[keyObj[model]]

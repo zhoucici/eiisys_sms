@@ -122,7 +122,7 @@
                   class="code"
                   :placeholder="'${'+nowTemplate.codeList[index]+'}'"
                   v-model="codeList[index]"
-                  oninput="if(value.length>4)value=value.slice(0,30)"
+                  oninput="if(value.length>4)value=value.slice(0,20)"
                   v-if="nowTemplate.codeList[index]"
                   :disabled="receiveType=='1'"
                   :class="{disabled:receiveType=='1'}"
@@ -235,6 +235,9 @@
                   <br />
                   <span>计费条数：{{getNum}}</span>
                   <br />
+                  <span>*实际发送短信字数将包涵变量</span>
+                  <br />
+                  <span>超过500字将导致发送失败</span>
                   <!-- <div class="z-btn text">查看短信计费规则</div> -->
                 </div>
               </div>
@@ -349,6 +352,13 @@ export default {
     };
   },
   watch: {
+    saveBtn_flag(val){
+      if (!val) {
+        setTimeout(()=>{
+          this.saveBtn_flag=true
+        },1000)
+      }
+    },
     manualtext(val) {
       this.$refs.manual.style.maxWidth = "400px";
       this.$refs.manual.style.minWidth = "1px";
@@ -534,7 +544,6 @@ export default {
             } else {
               this.errorTip(res.message);
             }
-            // this.saveBtn_flag=true
           });
         } else {
           let obj = {};
@@ -558,7 +567,6 @@ export default {
             } else {
               this.errorTip(res.message);
             }
-            // this.saveBtn_flag=true
           });
         }
       } else {
@@ -794,10 +802,10 @@ export default {
           margin-bottom: 20px;
           padding: 8px;
           .smsTip {
-            padding-right: 10px;
+            right: 10px;
             width: 100%;
             position: absolute;
-            bottom: -70px;
+            bottom: -85px;
             text-align: right;
             font-size: 12px;
             line-height: 20px;

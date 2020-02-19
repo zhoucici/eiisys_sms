@@ -15,15 +15,19 @@ export default {
       }
     }
   },
-  created() {
-    console.log(111);
-    
-    setTimeout(() => {
-      this.render();
+  watch: {
+    data(val) {
+      console.log(val);
       
-    }, 300);
-
-    
+      setTimeout(() => {
+        this.render();
+      }, 300);
+    }
+  },
+  created(){
+    setTimeout(() => {
+        this.render();
+      }, 300);
   },
   computed: {
     // echart实例
@@ -37,7 +41,6 @@ export default {
       var result = [];
       for (var i = 0; i < 12; i++) {
         var m = d.getMonth() + 1;
-
         m = m < 10 ? "0" + m : m;
         result.push(d.getFullYear() + "-" + m);
         d.setMonth(d.getMonth() + 1);
@@ -46,15 +49,18 @@ export default {
     },
     // 最终数据
     real_data() {
+      console.log(this.data);
+
       let arr = [];
       this.x_arr.map((val, i) => {
         if (
           this.data[val.replace("-", "")] ||
           this.data[val.replace("-", "")] === 0
         ) {
-          arr[i] = this.data[val.replace("-", "")];
+          arr[i] = this.data[val.replace("-", "")] / 1000;
+        } else {
+          arr[i] = 0;
         }
-        arr[i] = 0;
       });
       return arr;
     }
@@ -125,7 +131,7 @@ export default {
         series: [
           {
             name: "消费额",
-            data: this.real_data,
+            data: this.real_data ,
             symbolSize: 0,
             type: "line",
             itemStyle: {
@@ -140,8 +146,8 @@ export default {
       };
       this.my_chart.setOption(option);
       window.onresize = () => {
-      this.my_chart.resize();
-    };
+        this.my_chart.resize();
+      };
     }
   }
 };
