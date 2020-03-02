@@ -17,16 +17,12 @@ export const instance = axios.create({
 instance.interceptors.request.use(
     request=>{
         request.headers['x-access-token'] = sessionStorage.getItem('x-access-token');      
-
-        
         return request;
     }
 )
 
 instance.interceptors.response.use(
     response => {
-        
-
         return response.data;
     },
     

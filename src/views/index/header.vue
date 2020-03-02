@@ -21,8 +21,8 @@
         <img class="headImg" slot="reference" :src="$store.state.userInfo.headerUrl||'/img/header.svg'" alt="">
       </el-popover>
 
-      <div class="help" @click="$func.openLinkTo($url.sms_front+'/sms-document.html')"></div>
-      <div @click="$func.openLinkTo($url.sms_front)" class="front"></div>
+      <div class="help" @click="$func.openLinkTo(document)" ></div>
+      <div @click="$func.openLinkTo(front)" class="front"></div>
     </div>
   </div>
 </template>
@@ -30,6 +30,14 @@
 export default {
   data() {
     return {};
+  },
+  computed:{
+    front(){
+      return this.$url.sms_front +'?token='+sessionStorage.getItem('x-access-token')
+    },
+    document(){
+      return this.$url.sms_front+'/sms-document.html?token='+sessionStorage.getItem('x-access-token')
+    }
   },
   methods: {
     logo(){

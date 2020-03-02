@@ -127,21 +127,21 @@
           </div>
         </div>
 
-        <!-- <div class="card">
+        <div class="card">
           <div class="title">帮助</div>
           <div class="item">
             <div class="item-title floatleft">使用说明</div>
-            <div @click="$func.openLinkTo($url.sms_front+'/sms-document.html')" class="z-btn text floatright">了解详情</div>
+            <div @click="$func.openLinkTo(front1)" class="z-btn text floatright">了解详情</div>
           </div>
           <div class="item">
             <div class="item-title floatleft">短信业务规则</div>
-            <div @click="$func.openLinkTo($url.sms_front+'/sms-document.html')" class="z-btn text floatright">了解详情</div>
+            <div @click="$func.openLinkTo(front2)" class="z-btn text floatright">了解详情</div>
           </div>
           <div class="item">
             <div class="item-title floatleft">短信价格详情</div>
-            <div @click="$func.openLinkTo($url.sms_front+'/sms-document.html')" class="z-btn text floatright">了解详情</div>
+            <div @click="$func.openLinkTo(front3)" class="z-btn text floatright">了解详情</div>
           </div>
-        </div>-->
+        </div>
       </el-col>
     </el-row>
     <el-dialog
@@ -186,6 +186,17 @@ import Gchart from "@/components/data-chart.vue";
 export default {
   components: {
     Gchart
+  },
+  computed:{
+    front1(){
+      return this.$url.sms_front +'/sms-document.html?index=1'
+    },
+    front2(){
+      return this.$url.sms_front +'/sms-document.html?index=2'
+    },
+    front3(){
+      return this.$url.sms_front +'/sms-document.html?index=3'
+    }
   },
   data() {
     return {

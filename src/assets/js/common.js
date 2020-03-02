@@ -19,14 +19,11 @@ export const errorTip = function (text) {
 }
 const func = {
     openLinkTo(url, token = 0) {
-
-
         var tempwindow = window.open();
         if (token) {
             url += sessionStorage.getItem('x-access-token')
         }
         tempwindow.location = url;
-        console.log(tempwindow.location);
     },
 }
 

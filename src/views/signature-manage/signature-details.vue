@@ -1,5 +1,4 @@
 <template>
-  <!-- 添加营业执照 -->
   <el-dialog
     title="签名详情"
     :visible.sync="show_flag"
@@ -128,9 +127,7 @@ export default {
     getIndustry(func) {
       let url = `/industry/all`;
       this.$http.post(url).then(res => {
-        if (res.code == "000000") {
-          console.log(res);
-          
+        if (res.code == "000000") {          
           this.industryList = res.data;
         }
       });

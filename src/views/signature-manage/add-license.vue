@@ -51,19 +51,16 @@ export default {
     },
     data: {}
   },
-  watch: {
-    data: {
-      handler(val) {
-        if (this.data.type == 1) {
+  create(){
+    if (this.data.type == 1) {
           this.title = "添加营业执照";
           (!val.businessLicensePic)&&(this.imgsrc = "/img/img.svg");
         } else {
           this.title = "修改营业执照";
           this.imgsrc = val.businessLicensePic;
         }
-      },
-      deep: true
-    }
+  },
+  watch: {
   },
   methods: {
     clearPop() {

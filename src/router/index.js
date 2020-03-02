@@ -45,7 +45,8 @@ router.beforeEach((to, from, next) => {
         }
       })
       .catch(err => {
-        window.location.href = $url.sms_front+'?action=logout'
+        console.log(err)
+        // window.location.href = $url.sms_front+'?action=logout'
         // next({ name: 'error' })
       })
   }
