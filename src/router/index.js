@@ -41,12 +41,14 @@ router.beforeEach((to, from, next) => {
           sessionStorage.setItem('x-access-token', res.token);
           next()
         } else {
+          // alert('令牌失效，登录过期！')
+          // window.location.href = $url.sms_front+'?action=logout'
           // next({ name: 'error' })
         }
       })
       .catch(err => {
-        console.log(err)
-        // window.location.href = $url.sms_front+'?action=logout'
+        alert('令牌失效，登录过期！')
+        window.location.href = $url.sms_front+'?action=logout'
         // next({ name: 'error' })
       })
   }

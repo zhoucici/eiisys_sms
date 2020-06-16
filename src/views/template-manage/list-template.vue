@@ -92,7 +92,7 @@ export default {
             function sortId(a, b) {
             return a.smsType - b.smsType;
           }
-          this.dataList.sort(sortId);
+          this.dataList.sort(sortId)
             this.dataList.map(val=>{
                 this.typeNum[val.smsType]?this.typeNum[val.smsType]++:this.typeNum[val.smsType]=1
             }) 

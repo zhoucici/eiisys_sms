@@ -34,7 +34,7 @@
             <div>
               短信类型：
               <el-select
-              :popper-append-to-body='false'
+                :popper-append-to-body="false"
                 style="width:130px"
                 size="small"
                 @change="getdata"
@@ -154,14 +154,25 @@
       <div class="bindMain">
         <div class="bindItem">
           <label>短信类型：</label>
-          <el-select style="width:436px;" size="small" v-model="bindSmsType" @change="getTemplate" placeholder="请选择短信类型">
+          <el-select
+            style="width:436px;"
+            size="small"
+            v-model="bindSmsType"
+            @change="getTemplate"
+            placeholder="请选择短信类型"
+          >
             <el-option :value="1" label="通知类短信"></el-option>
             <el-option :value="3" label="验证码短信"></el-option>
           </el-select>
         </div>
         <div class="bindItem">
           <label>模板名称：</label>
-          <el-select style="width:436px;margin-top:20px" size="small" v-model="nowTemplate" placeholder="请选择模板名称">
+          <el-select
+            style="width:436px;margin-top:20px"
+            size="small"
+            v-model="nowTemplate"
+            placeholder="请选择模板名称"
+          >
             <el-option
               v-for="(item, index) in templateList"
               :key="index"
@@ -177,8 +188,7 @@
         <div class="z-btn normal" @click="()=>bindFlag=false">取 消</div>
       </span>
     </el-dialog>
-    <z-recharge :flag='rechargeFlag' @close='()=>rechargeFlag=false' :kuaifuBlance='kuaifuBlance'></z-recharge>
-
+    <z-recharge :flag="rechargeFlag" @close="()=>rechargeFlag=false" :kuaifuBlance="kuaifuBlance"></z-recharge>
   </z-page>
 </template>
 <script>
@@ -187,15 +197,15 @@ export default {
   components: {
     Gchart
   },
-  computed:{
-    front1(){
-      return this.$url.sms_front +'/sms-document.html?index=1'
+  computed: {
+    front1() {
+      return this.$url.sms_front + "/sms-document.html?index=1";
     },
-    front2(){
-      return this.$url.sms_front +'/sms-document.html?index=2'
+    front2() {
+      return this.$url.sms_front + "/sms-document.html?index=2";
     },
-    front3(){
-      return this.$url.sms_front +'/sms-document.html?index=3'
+    front3() {
+      return this.$url.sms_front + "/sms-document.html?index=3";
     }
   },
   data() {
@@ -248,8 +258,10 @@ export default {
     };
   },
   created() {
+    //查看是否开通
+    this.hasOpen();
     //初始化一些数据 调用一些函数
-    this.$store.dispatch("getUserInfo",true)
+    this.$store.dispatch("getUserInfo", true);
     this.getDayData();
     this.getMonthData();
     this.getActivityInfo();
@@ -267,9 +279,19 @@ export default {
     }
   },
   methods: {
+    hasOpen() {
+      let url = `/disclaimer/select`;
+      this.$http.post(url).then(res => {
+        if (!res.data) {
+          alert("您尚未开通短信服务，请到首页开通！")
+           window.location.href = this.$url.sms_front
+        } else {
+        }
+      });
+    },
     openBind() {
-      this.bindSmsType=''
-      this.nowTemplate=''
+      this.bindSmsType = "";
+      this.nowTemplate = "";
       this.bindFlag = true;
     },
     //获取模板
@@ -288,30 +310,30 @@ export default {
     },
     //绑定活动模板
     bind() {
-      if(this.nowTemplate&&this.bindSmsType){
-        let url = `/activity/record/bind`
-      this.bindFlag=false
-      this.$http.post(url,{
-        templateCode:this.nowTemplate
-      })
-      .then(res=>{
-        console.log(res);
-        if(res.code=='000000'){
-          this.successTip('绑定成功')
-          this.getActivityInfo()
-        }else{
-          this.errorTip(res.message)
-        }
-      })
-      }else{
-        this.errorTip('请选择短信类型和短信模板！')
+      if (this.nowTemplate && this.bindSmsType) {
+        let url = `/activity/record/bind`;
+        this.bindFlag = false;
+        this.$http
+          .post(url, {
+            templateCode: this.nowTemplate
+          })
+          .then(res => {
+            console.log(res);
+            if (res.code == "000000") {
+              this.successTip("绑定成功");
+              this.getActivityInfo();
+            } else {
+              this.errorTip(res.message);
+            }
+          });
+      } else {
+        this.errorTip("请选择短信类型和短信模板！");
       }
-      
     },
     //使用活动模板发送 这里带参数跳转
     useActivity() {
       console.log(this.ActivityData);
-      
+
       this.$router.push({
         name: "sms-sending",
         params: this.ActivityData
@@ -322,7 +344,7 @@ export default {
       let url = `/activity/record/info`;
       this.$http.post(url).then(res => {
         console.log(res);
-        if (res.code == "000000"&&res.data) {
+        if (res.code == "000000" && res.data) {
           this.ActivityData = res.data;
         }
       });
@@ -347,7 +369,7 @@ export default {
       this.$http.post(url, this.rechargeNum).then(res => {
         if (res.code == "000000") {
           this.$store.dispatch("getUserInfo", true);
-          this.getActivityInfo()
+          this.getActivityInfo();
           this.successTip("充值成功");
         } else {
           this.errorTip(res.message);

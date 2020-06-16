@@ -123,10 +123,12 @@
             </el-radio-group>
           </div>
         </div>
-        <div class="content-item" v-if="data.signatureSource==1">
-          <label>备案网址：</label>
+        <div class="content-item" v-if="data.signatureSource==1||data.signatureSource==2||data.signatureSource==4">
+          <label v-if="data.signatureSource==1">备案网址：</label>
+          <label v-else-if="data.signatureSource==2">APP下载地址：</label>
+          <label v-else-if="data.signatureSource==4">店铺地址：</label>
           <div class="item-content">
-            <el-input v-model="data.websiteDomainName" placeholder="请输入工信部备案网址" size="small"></el-input>
+            <el-input v-model="data.websiteDomainName" :placeholder="data.signatureSource==1?'请输入工信部备案网址':(data.signatureSource==2?'请输入APP下载地址':'请输入店铺地址')" size="small"></el-input>
           </div>
         </div>
         <div class="content-item">
@@ -211,9 +213,9 @@ export default {
       
     },
     "data.signatureSource"(val) {
-      if (val == 1) {
+      if (val == 1||val == 2||val == 4) {
       } else {
-        this.data.websiteDomainName = null;
+        this.$set(this.data,'websiteDomainName',null)
       }
     }
   },
@@ -257,6 +259,7 @@ export default {
     fileChange(e) {
       e = e || window.event;
       let file = e.target.files[0];
+      
       if (file) {
         if (file.type != "image/jpeg") {
           this.errorTip("只支持jpg格式");
@@ -268,7 +271,6 @@ export default {
         }
         this.data.file = file;
         this.data.powerAttorneyFile = this.getObjectURL(file);
-        console.log(this.data.powerAttorneyFile);
         this.$forceUpdate();
       }
     },
@@ -303,10 +305,18 @@ export default {
       if (this.data.smsType == "4") {
         tip.industryId = "行业类型";
       }
-      if (this.data.signatureSource == 1) {
-        tip.websiteDomainName = "备案网址";
+      
+      switch (this.data.signatureSource) {
+        case '1':
+          tip.websiteDomainName = "备案网址";
+          break;
+      case '2':
+          tip.websiteDomainName = "APP下载地址";
+          break;
+        case '4':
+          tip.websiteDomainName = "店铺地址";
+          break;
       }
-      console.log(this.data);
       
       for (let key in tip) {
         if (!this.data[key]) {

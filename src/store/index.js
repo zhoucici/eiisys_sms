@@ -28,7 +28,6 @@ export default new Vuex.Store({
   actions: {
     // 拉取分组信息
     getUserGroup({ commit, state }, flag = false) {
-
       if (flag || state.userGroupList.length<=0) {
         return $http.post("/userGroup/list")
           .then(res => {
