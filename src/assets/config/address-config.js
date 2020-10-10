@@ -18,6 +18,7 @@ const webUrl = {
     // 测试模式
     test:{
         sass:"http://api.saas.71baomu.com",
+        
         kuaifu:'http://www.71baomu.com',
         eiisys_sms:'http://122.112.204.156:8290',
         eiisys_smsindex:"https://peiisys.eiisys.com/html/eiisys-index.html",  // 海翕云对应官网
